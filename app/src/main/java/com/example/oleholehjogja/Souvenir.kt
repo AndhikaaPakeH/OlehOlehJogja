@@ -48,3 +48,21 @@ val Souvenir.estimatedWeightGrams: Int
         "salak-pondoh" -> 1000
         else -> 350
     }
+
+val Souvenir.mainCenterLocation: String
+    get() = when (id) {
+        "bakpia-pathok" -> "Sentra Industri Bakpia Pathuk, Jl. KS Tubun, Yogyakarta"
+        "gudeg-kendil" -> "Sentra Gudeg Wijilan, Kraton, Yogyakarta"
+        "wedang-uwuh" -> "Sentra Perajin Wedang Uwuh, Imogiri, Bantul, Yogyakarta"
+        "yangko-kotagede" -> "Yangko Pak Paku, Jl. Mondorakan, Kotagede, Yogyakarta"
+        "geplak-bantul" -> "Sentra Geplak Mbok Tumpuk, Jl. Wahid Hasyim, Bantul, Yogyakarta"
+        "bakpia-kukus" -> "Bakpia Kukus Tugu Jogja, Stasiun Tugu, Yogyakarta"
+        "oseng-mercon" -> "Warung Oseng Mercon Bu Narti, Jl. KH. Ahmad Dahlan, Yogyakarta"
+        "peyek-tumpuk" -> "Mbok Tumpuk Peyek Tumpuk, Palbapang, Bantul, Yogyakarta"
+        "kopi-jos" -> "Angkringan Kopi Jos Lik Man, Stasiun Tugu, Yogyakarta"
+        "cokelat-monggo" -> "Museum & Pabrik Cokelat Monggo, Kotagede, Yogyakarta"
+        "jadah-tempe" -> "Jadah Tempe Mbah Carik Pusat, Kaliurang, Sleman, Yogyakarta"
+        "tiwul-manis" -> "Tiwul Yu Tum Pusat, Wonosari, Gunungkidul, Yogyakarta"
+        "salak-pondoh" -> "Desa Wisata Salak Pondoh Turi, Sleman, Yogyakarta"
+        else -> locations.firstOrNull() ?: "$name Yogyakarta"
+    }

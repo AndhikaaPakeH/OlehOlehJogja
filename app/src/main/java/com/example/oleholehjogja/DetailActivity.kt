@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -52,6 +53,7 @@ class DetailActivity : AppCompatActivity() {
             return
         }
         souvenir = resolvedSouvenir
+        VisitedManager.addVisited(this, souvenir.id)
 
         initViews()
         populateData()
@@ -152,6 +154,9 @@ class DetailActivity : AppCompatActivity() {
                 textSize = 11.5f
                 setLineSpacing(dpToPx(1).toFloat(), 1f)
             }
+            row.setOnClickListener {
+                openMaps(loc)
+            }
             row.addView(dot)
             row.addView(text)
             containerLocations.addView(row)
@@ -216,7 +221,8 @@ class DetailActivity : AppCompatActivity() {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("Rute Belanja Oleh-Oleh", routeInfo)
             clipboard.setPrimaryClip(clip)
-            Toast.makeText(this, "Lokasi belanja berhasil disalin!", Toast.LENGTH_SHORT).show()
+
+            openMaps(souvenir.mainCenterLocation)
         }
 
         findViewById<View>(R.id.btnAddToCartDetail).setOnClickListener {
@@ -276,5 +282,22 @@ class DetailActivity : AppCompatActivity() {
 
     private fun dpToPx(dp: Int): Int {
         return (dp * resources.displayMetrics.density).toInt()
+    }
+
+    private fun openMaps(query: String) {
+        try {
+            val uri = Uri.parse("geo:0,0?q=" + Uri.encode(query))
+            val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            if (mapIntent.resolveActivity(packageManager) != null) {
+                startActivity(mapIntent)
+            } else {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(query)))
+                startActivity(browserIntent)
+            }
+        } catch (e: Exception) {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + Uri.encode(query)))
+            startActivity(browserIntent)
+        }
     }
 }

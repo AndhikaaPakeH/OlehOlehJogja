@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
     // Profile Views
     private lateinit var tvProfileStatSaved: TextView
     private lateinit var tvProfileStatCart: TextView
+    private lateinit var tvProfileStatVisited: TextView
     private lateinit var tvMenuSavedBadge: TextView
     private lateinit var tvMenuCartBadge: TextView
     private lateinit var layoutStatSaved: View
@@ -167,6 +168,7 @@ class MainActivity : AppCompatActivity() {
 
         tvProfileStatSaved = findViewById(R.id.tvProfileStatSaved)
         tvProfileStatCart = findViewById(R.id.tvProfileStatCart)
+        tvProfileStatVisited = findViewById(R.id.tvProfileStatVisited)
         tvMenuSavedBadge = findViewById(R.id.tvMenuSavedBadge)
         tvMenuCartBadge = findViewById(R.id.tvMenuCartBadge)
         layoutStatSaved = findViewById(R.id.layoutStatSaved)
@@ -303,8 +305,10 @@ class MainActivity : AppCompatActivity() {
     private fun updateProfileSavedStat() {
         val count = BookmarkManager.getCount(this)
         val cartCount = CartManager.getTotalItemCount()
+        val visitedCount = VisitedManager.getCount(this)
         tvProfileStatSaved.text = count.toString()
         tvProfileStatCart.text = cartCount.toString()
+        tvProfileStatVisited.text = visitedCount.toString()
         tvMenuSavedBadge.text = "$count item"
         tvMenuCartBadge.text = "$cartCount item"
     }
@@ -511,6 +515,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun openDetail(souvenirId: String) {
         val item = SouvenirData.getById(souvenirId) ?: return
+        VisitedManager.addVisited(this, item.id)
         val intent = Intent(this, DetailActivity::class.java).apply {
             putExtra("souvenir", item)
             putExtra("souvenir_id", item.id)
